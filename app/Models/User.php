@@ -2,47 +2,48 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'name', 'email', 'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password', 'remember_token',
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Obtener todos los lotes asociados al usuario.
      */
-    protected function casts(): array
+    public function lotes()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return DB::table('lotes')->where('user_id', $this->id)->get();
+    }
+
+    /**
+     * Obtener todas las mediciones asociadas a los lotes del usuario.
+     */
+    public function mediciones()
+    {
+        $lotes = $this->lotes();
+        $loteIds = array_column($lotes->toArray(), 'id');
+        return DB::table('mediciones')->whereIn('lote_id', $loteIds)->get();
+    }
+
+    /**
+     * Verificar si el usuario tiene un lote específico.
+     */
+    public function tieneLote($loteId)
+    {
+        return DB::table('lotes')->where('id', $loteId)->where('user_id', $this->id)->exists();
     }
 }
