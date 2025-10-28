@@ -20,7 +20,7 @@ return [
         'localhost:3000',
         '127.0.0.1',
         '127.0.0.1:8000',
-        'chivimarket.arumasoft.com', // Dominio de producción
+        'aguamediciones.arumasoft.com', // Dominio de producción
         '::1', // IPv6 localhost
     ])),
     
