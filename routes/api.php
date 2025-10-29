@@ -55,7 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Ruta para cerrar sesión
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::get('/me', [AuthController::class, 'me']);
+    //Route::get('/me', [AuthController::class, 'me']);
 });
 
 Route::get('/test-guard', function (Request $request) {
@@ -68,3 +68,15 @@ Route::get('/test-guard', function (Request $request) {
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('auth:sanctum')->get('/me', [AuthController::class, 'me']);
+
+Route::get('/test', function (Request $request) {
+    return response()->json([
+        'auth_check' => auth()->check(),
+        'user' => auth()->user(),
+        'guard' => auth()->guard()->getName(),
+    ]);
+})->middleware('auth:sanctum');
+
+
