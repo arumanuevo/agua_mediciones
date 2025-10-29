@@ -15,14 +15,8 @@ return [
     |
     */
 
-    'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', [
-        'localhost',
-        'localhost:3000',
-        '127.0.0.1',
-        '127.0.0.1:8000',
-        'aguamediciones.arumasoft.com', // Dominio de producción
-        '::1', // IPv6 localhost
-    ])),
+    'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', '')),
+
     
 
     /*
