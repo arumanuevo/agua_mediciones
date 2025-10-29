@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:administrador')->group(function () {
         Route::apiResource('users', UserController::class);
         Route::get('/informes/usuarios', [InformeController::class, 'listadoUsuarios']);
+        Route::get('/users/{user}', [AuthController::class, 'show']);
     });
 
     // Rutas para lotes
@@ -53,4 +54,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Ruta para cerrar sesión
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/me', [AuthController::class, 'me']);
 });

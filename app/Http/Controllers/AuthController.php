@@ -82,5 +82,46 @@ class AuthController extends Controller
             'message' => 'Sesión cerrada correctamente',
         ]);
     }
+
+    /**
+     * Obtener los datos del usuario autenticado.
+     */
+    public function me(Request $request)
+    {
+        $user = $request->user();
+
+        return response()->json([
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'roles' => $user->getRoleNames(),
+                'lotes' => $user->lotes(), // Método que ya tienes en el modelo User
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at,
+            ],
+        ]);
+    }
+
+    /**
+     * Obtener los datos de un usuario específico (solo administradores).
+     */
+    public function show(User $user)
+    {
+        $this->authorize('gestionar-usuarios'); // Usa el gate que definimos en AuthServiceProvider
+
+        return response()->json([
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'roles' => $user->getRoleNames(),
+                'lotes' => $user->lotes(),
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at,
+            ],
+        ]);
+    }
+
 }
 
