@@ -57,3 +57,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/me', [AuthController::class, 'me']);
 });
+
+Route::get('/test-guard', function (Request $request) {
+    return response()->json([
+        'guard' => auth()->guard()->getName(),
+        'user' => $request->user(),
+    ]);
+})->middleware('auth:sanctum');
