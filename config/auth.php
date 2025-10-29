@@ -41,11 +41,11 @@ return [
             'provider' => 'users',
         ],
         'api' => [
-            'driver' => 'token',
+            'driver' => 'sanctum', // <-- Debe ser 'sanctum'
             'provider' => 'users',
-            'hash' => false,
         ],
     ],
+    
 
     /*
     |--------------------------------------------------------------------------
