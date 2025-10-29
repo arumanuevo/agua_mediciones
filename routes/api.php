@@ -64,3 +64,7 @@ Route::get('/test-guard', function (Request $request) {
         'user' => $request->user(),
     ]);
 })->middleware('auth:sanctum');
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
