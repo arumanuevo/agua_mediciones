@@ -88,6 +88,8 @@ class AuthController extends Controller
      */
     public function me(Request $request)
     {
+        \Log::info('Guard usado:', [auth()->guard()->getName()]);
+        
         $user = $request->user();
 
         return response()->json([
