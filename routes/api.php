@@ -79,4 +79,12 @@ Route::get('/test', function (Request $request) {
     ]);
 })->middleware('auth:sanctum');
 
+Route::middleware('auth:sanctum')->get('/verify', function (Request $request) {
+    return response()->json([
+        'authenticated' => auth()->check(),
+        'user' => auth()->user(),
+    ]);
+});
+
+
 
