@@ -41,27 +41,27 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        
+        // Validar los datos de entrada
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
-      
+    
+        // Buscar al usuario por email
         $user = User::where('email', $request->email)->first();
-        return response()->json([
-            'message' => 'Login exitoso',
-            'user' => $user,
-            
-        ]);
+    
+        // Si el usuario no existe o la contraseña es incorrecta
         if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['Las credenciales son incorrectas.'],
-            ]);
+            return response()->json([
+                'message' => 'Las credenciales son incorrectas.',
+                'errors' => ['email' => ['Las credenciales proporcionadas no coinciden con nuestros registros.']],
+            ], 401); // Código 401: No autorizado
         }
-
+    
         // Crear token de Sanctum
         $token = $user->createToken('api-token')->plainTextToken;
-
+    
+        // Respuesta exitosa
         return response()->json([
             'message' => 'Login exitoso',
             'user' => $user,
@@ -69,6 +69,7 @@ class AuthController extends Controller
             'roles' => $user->getRoleNames(),
         ]);
     }
+    
 
     /**
      * Cerrar sesión (eliminar el token actual).
